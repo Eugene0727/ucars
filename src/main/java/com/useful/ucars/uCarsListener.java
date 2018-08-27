@@ -311,7 +311,7 @@ public class uCarsListener implements Listener {
 		String p = playername;
 		World w = plugin.getServer().getPlayer(p).getLocation().getWorld();
 		w.playSound(plugin.getServer().getPlayer(p).getLocation(),
-				Sound.BAT_TAKEOFF, 1.5f, -2);
+				Sound.ENTITY_BAT_TAKEOFF, 1.5f, -2);
 		if (ucars.carBoosts.containsKey(p)) {
 			ucars.carBoosts.remove(p);
 		}
@@ -344,7 +344,7 @@ public class uCarsListener implements Listener {
 						World w = plugin.getServer().getPlayer(p).getLocation()
 								.getWorld();
 						w.playSound(plugin.getServer().getPlayer(p)
-								.getLocation(), Sound.FIZZ, 1.5f, -2);
+								.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 1.5f, -2);
 						double speed = current + power;
 						ucars.carBoosts.put(p, speed);
 						// Boosting!
@@ -611,8 +611,7 @@ public class uCarsListener implements Listener {
 		CarHealthData health = getCarHealthHandler(car);
 		Boolean recalculateHealth = false;
 		// Calculate health based on location
-		if (normalblock.getType().equals(Material.WATER)
-				|| normalblock.getType().equals(Material.STATIONARY_WATER)) {
+		if (normalblock.getType().equals(Material.WATER)) {
 			double damage = damage_water;
 			if (damage > 0) {
 				if (driven) {
@@ -633,8 +632,7 @@ public class uCarsListener implements Listener {
 				recalculateHealth = true;
 			}
 		}
-		if (normalblock.getType().equals(Material.LAVA)
-				|| normalblock.getType().equals(Material.STATIONARY_LAVA)) {
+		if (normalblock.getType().equals(Material.LAVA)) {
 			double damage = damage_lava;
 			if (damage > 0) {
 				if (driven) {
@@ -1015,11 +1013,12 @@ public class uCarsListener implements Listener {
 			}
 			travel.setY(newy);
 		}*/
-		
+
+		//TODO
 		Material bType = block.getType();
 		int bData = block.getData();
 		Boolean fly = false; // Fly is the 'easter egg' slab elevator
-		if (normalblock.getRelative(faceDir).getType() == Material.STEP) {
+		if (normalblock.getRelative(faceDir).getType() == Material.LEGACY_STEP) {
 			// If looking at slabs
 			fly = true;
 		}
@@ -1170,10 +1169,10 @@ public class uCarsListener implements Listener {
 		if (inStairs ||
 				 (!ignoreJump.contains(bType.name().toUpperCase()) && cont && modY)) { //Should jump
 			if (bidU == Material.AIR || bidU == Material.LAVA 
-					|| bidU == Material.STATIONARY_LAVA || bidU == Material.WATER
-					|| bidU == Material.STATIONARY_WATER || bidU == Material.STEP 
-					|| bidU == Material.CARPET
-					|| bidU == Material.DOUBLE_STEP || inStairs) { //Clear air above
+					|| bidU == Material.LAVA || bidU == Material.WATER
+					|| bidU == Material.WATER || bidU == Material.LEGACY_STEP
+					|| bidU == Material.LEGACY_CARPET
+					|| bidU == Material.LEGACY_DOUBLE_STEP || inStairs) { //Clear air above
 				theNewLoc.add(0, 1.5d, 0);
 				Boolean calculated = false;
 				double y = 1.1;
@@ -1452,7 +1451,7 @@ public class uCarsListener implements Listener {
 		if (event.getPlayer().getItemInHand().getType() == Material.MINECART) {
 			// Its a minecart!
 			Material iar = block.getType();
-			if (ucars.ignoreRails && (iar == Material.RAILS || iar == Material.ACTIVATOR_RAIL 
+			if (ucars.ignoreRails && (iar == Material.RAIL || iar == Material.ACTIVATOR_RAIL
 					|| iar == Material.POWERED_RAIL || iar == Material.DETECTOR_RAIL)) {
 				return;
 			}
@@ -1706,7 +1705,7 @@ public class uCarsListener implements Listener {
 	@EventHandler
 	void wirelessRedstone(BlockRedstoneEvent event){
 		Block block = event.getBlock();
-		if(!block.getType().equals(Material.REDSTONE_LAMP_ON) && !block.getType().equals(Material.REDSTONE_LAMP_OFF)){
+		if(!block.getType().equals(Material.LEGACY_REDSTONE_LAMP_ON) && !block.getType().equals(Material.LEGACY_REDSTONE_LAMP_OFF)){
 			return;
 		}
 		boolean on = block.isBlockPowered();
@@ -1796,7 +1795,7 @@ public class uCarsListener implements Listener {
 	@EventHandler
 	void trafficIndicators(BlockRedstoneEvent event){
 		Block block = event.getBlock();
-		if(!block.getType().equals(Material.REDSTONE_LAMP_ON) && !block.getType().equals(Material.REDSTONE_LAMP_OFF)){
+		if(!block.getType().equals(Material.LEGACY_REDSTONE_LAMP_ON) && !block.getType().equals(Material.LEGACY_REDSTONE_LAMP_OFF)){
 			return;
 		}
 		boolean on = block.isBlockPowered();
@@ -1886,12 +1885,12 @@ public class uCarsListener implements Listener {
 									.getY() + 4) && !found; y++) {
 								Location light = new Location(
 										loc.getWorld(), locX, y, locZ);
-								if (light.getBlock().getType() == Material.REDSTONE_LAMP_OFF) {
+								if (light.getBlock().getType() == Material.LEGACY_REDSTONE_LAMP_OFF) {
 									if (trafficlightSignOn(light.getBlock())) {
 										found = true;
 										on = false;
 									}
-								} else if (light.getBlock().getType() == Material.REDSTONE_TORCH_ON) {
+								} else if (light.getBlock().getType() == Material.LEGACY_REDSTONE_TORCH_ON) {
 									if (trafficlightSignOn(light.getBlock())) {
 										found = true;
 										on = true;
